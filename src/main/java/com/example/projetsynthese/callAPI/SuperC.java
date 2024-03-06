@@ -1,5 +1,6 @@
 package com.example.projetsynthese.callAPI;
 
+import com.example.projetsynthese.model.Product;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class SuperC {
     public final String URL = "https://www.superc.ca/recherche";
-    private List<String> produits = new ArrayList<>();
+    private List<Product> produits = new ArrayList<>();
 
     private final int NB_MAX_PAGE = 375;
 
@@ -21,22 +22,30 @@ public class SuperC {
     }
 
     private void getDatas() {
-        try {
-            Connection connection;
-            Document doc;
-            String urlToFetch;
-            for (int i = 0; i < NB_MAX_PAGE; i++){
-                urlToFetch = URL;
-                if(i != 0){
-                    urlToFetch += "-page-"+i;
-                }
-                connection = Jsoup.connect(urlToFetch);
-                doc = connection.get();
-                transferToArray(doc);
-            }
-        }
-        catch (IOException ignored){
+        int nbThread = 1;
+        int iterationsPerThread = NB_MAX_PAGE / nbThread;
+        int remainingIterations = NB_MAX_PAGE / nbThread;
+        for (int i = 0; i < nbThread; i++){
+            final int start = i * iterationsPerThread;
+            final int end = (i == nbThread - 1) ? start + iterationsPerThread + remainingIterations : start + iterationsPerThread;
+            Thread thread = new Thread(() -> {
+               for (int j = start; j < end; j++){
+                   String urlToFetch = URL;
+                   if(j != 0){
+                       urlToFetch += "-page-"+j;
+                   }
 
+                   Connection connection = Jsoup.connect(urlToFetch);
+                   Document doc;
+                   try {
+                       doc = connection.get();
+                   } catch (IOException e) {
+                       throw new RuntimeException(e);
+                   }
+                   transferToArray(doc);
+               }
+            });
+            thread.start();
         }
     }
 
@@ -45,13 +54,13 @@ public class SuperC {
 
         for (Element div: productDivs){
             String name = div.select("div.head__title").text();
-            String price = div.select("span.price-update").text();
+            String price = div.select("span.price-update").text();//replace("$", "") and replace(",", ".") to remove the dollar sign and the comma
 
-            String infos = "Name: " + name + ", Price: " + price;
-            produits.add(infos);
+            Product product = new Product(name, price);
+            produits.add(product);
         }
 
-        for (String element: produits){
+        for (Product element: produits){
             System.out.println(element);
         }
         System.out.println(produits.size());
