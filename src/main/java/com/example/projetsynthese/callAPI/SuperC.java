@@ -22,7 +22,7 @@ public class SuperC {
     }
 
     private void getDatas() {
-        int nbThread = 1;
+        int nbThread = 8;
         int iterationsPerThread = NB_MAX_PAGE / nbThread;
         int remainingIterations = NB_MAX_PAGE / nbThread;
         for (int i = 0; i < nbThread; i++){
@@ -47,22 +47,29 @@ public class SuperC {
             });
             thread.start();
         }
+
+        //convert my list to Set to remove duplicates
+        List<Product> products = new ArrayList<>(produits);
+        produits.clear();
+        produits.addAll(products);
+
     }
 
     private void transferToArray(Document doc){
         Elements productDivs = doc.select("div.tile-product");
 
+        List<Product> tempList = new ArrayList<>();
+
         for (Element div: productDivs){
             String name = div.select("div.head__title").text();
-            String price = div.select("span.price-update").text();//replace("$", "") and replace(",", ".") to remove the dollar sign and the comma
+            String price = div.select("span.price-update").text();
 
             Product product = new Product(name, price);
-            produits.add(product);
+            tempList.add(product);
         }
 
-        for (Product element: produits){
-            System.out.println(element);
+        synchronized (produits){
+            produits.addAll(tempList);
         }
-        System.out.println(produits.size());
     }
 }
