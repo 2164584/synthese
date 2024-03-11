@@ -1,5 +1,6 @@
 package com.example.projetsynthese;
 
+import com.example.projetsynthese.callAPI.Maxi;
 import com.example.projetsynthese.callAPI.SuperC;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -17,7 +18,8 @@ import java.util.List;
 public class ProjetsyntheseApplication {
 
 	public static void main(String[] args) throws IOException {
-		SuperC superC = new SuperC();
+		//SuperC superC = new SuperC();
+		Maxi maxi = new Maxi();
 	}
 
 }

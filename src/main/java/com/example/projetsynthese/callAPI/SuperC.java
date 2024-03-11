@@ -47,12 +47,13 @@ public class SuperC {
             });
             thread.start();
         }
-
-        //convert my list to Set to remove duplicates
-        List<Product> products = new ArrayList<>(produits);
-        produits.clear();
-        produits.addAll(products);
-
+        while (Thread.activeCount() > 1){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void transferToArray(Document doc){
@@ -71,5 +72,6 @@ public class SuperC {
         synchronized (produits){
             produits.addAll(tempList);
         }
+        System.out.println(produits.size());
     }
 }
