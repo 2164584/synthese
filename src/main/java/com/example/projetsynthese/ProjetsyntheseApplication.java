@@ -8,7 +8,7 @@ import java.io.IOException;
 @SpringBootApplication
 public class ProjetsyntheseApplication {
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException {
 		//SuperC superC = new SuperC();
 		Metro maxi = new Metro();
 	}
