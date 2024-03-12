@@ -1,25 +1,16 @@
 package com.example.projetsynthese;
 
-import com.example.projetsynthese.callAPI.Maxi;
-import com.example.projetsynthese.callAPI.SuperC;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.boot.SpringApplication;
+import com.example.projetsynthese.callAPI.Metro;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ProjetsyntheseApplication {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		//SuperC superC = new SuperC();
-		Maxi maxi = new Maxi();
+		Metro maxi = new Metro();
 	}
 
 }
