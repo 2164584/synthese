@@ -17,6 +17,8 @@ import java.util.List;
 
 public class Metro {
     public final String URL = "https://www.metro.ca/fr/epicerie-en-ligne/recherche";
+
+    private List<String> categories = new ArrayList<>();
     private List<Product> produits = new ArrayList<>();
 
     private final int NB_MAX_PAGE = 200;
@@ -26,6 +28,15 @@ public class Metro {
     }
 
     private void getDatas() {
+        WebDriver driver1 = new ChromeDriver();
+        driver1.get(URL);
+        List<WebElement> categories = driver1.findElements(By.cssSelector("div.accordion--text"));
+        for (WebElement category : categories) {
+            this.categories.add(category.getText());
+        }
+        System.out.println(this.categories);
+
+
         for (int i = 0; i < NB_MAX_PAGE; i++){
             WebDriver driver = new ChromeDriver();
             if (i != 0) {
