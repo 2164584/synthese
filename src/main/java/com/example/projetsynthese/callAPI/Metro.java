@@ -30,14 +30,13 @@ public class Metro {
     private void getDatas() {
         WebDriver driver1 = new ChromeDriver();
         driver1.get(URL);
-        List<WebElement> categories = driver1.findElements(By.cssSelector("div.accordion--text"));
-        for (WebElement category : categories) {
-            this.categories.add(category.getText());
-        }
-        System.out.println(this.categories);
+        WebElement categories = driver1.findElement(By.cssSelector("div.accordion--text"));
+
+        System.out.println("Text: " + categories.findElements(By.cssSelector("div")).size());
+        driver1.quit();
 
 
-        for (int i = 0; i < NB_MAX_PAGE; i++){
+        /*for (int i = 0; i < NB_MAX_PAGE; i++){
             WebDriver driver = new ChromeDriver();
             if (i != 0) {
                 driver.get(URL + "-page-" + (i + 1));
@@ -47,7 +46,7 @@ public class Metro {
 
             transferToArray(driver);
             driver.quit();
-        }
+        }*/
     }
 
     private void transferToArray(WebDriver driver){
