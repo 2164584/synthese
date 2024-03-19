@@ -1,52 +1,57 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Metro {
-    public final String URL = "https://www.metro.ca/fr/epicerie-en-ligne/recherche";
-
-    private List<String> categories = new ArrayList<>();
+    public final String URL = "https://www.metro.ca/epicerie-en-ligne/recherche";
+    private int nbPageMax;
     private List<Product> produits = new ArrayList<>();
-
-    private final int NB_MAX_PAGE = 200;
 
     public Metro() {
         getDatas();
     }
 
     private void getDatas() {
-        WebDriver driver1 = new ChromeDriver();
-        driver1.get(URL);
-        WebElement categories = driver1.findElement(By.cssSelector("div.accordion--text"));
 
-        System.out.println("Text: " + categories.findElements(By.cssSelector("div")).size());
-        driver1.quit();
+        WebDriver getLastPageDriver = new ChromeDriver();
+        getLastPageDriver.get(URL);
+        List<WebElement> lastPage = getLastPageDriver.findElements(By.cssSelector("a.ppn--element"));
+        nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).getText());
+        getLastPageDriver.quit();
 
+        int nbThread = 8;
 
-        /*for (int i = 0; i < NB_MAX_PAGE; i++){
-            WebDriver driver = new ChromeDriver();
-            if (i != 0) {
-                driver.get(URL + "-page-" + (i + 1));
-            } else {
-                driver.get(URL);
+        Thread[] threads = new Thread[nbThread];
+        for (int i = 0; i < nbThread; i++){
+            final int start = i * (nbPageMax / nbThread);
+            final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
+            threads[i] = new Thread(() -> {
+                for (int j = start; j < end; j++){
+                    String urlToFetch = URL + "-page-"+j;
+                    WebDriver driver = new ChromeDriver();
+                    driver.get(urlToFetch);
+                    transferToArray(driver);
+                    driver.quit();
+                }
+            });
+            threads[i].start();
+        }
+
+        for (int i = 0; i < nbThread; i++){
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
-            transferToArray(driver);
-            driver.quit();
-        }*/
+        }
+        System.out.println("fecthing done");
     }
 
     private void transferToArray(WebDriver driver){
@@ -55,7 +60,6 @@ public class Metro {
         for (WebElement productTile : productTiles) {
             String name = productTile.findElement(By.cssSelector("div.head__title")).getText();
             String price = productTile.findElement(By.cssSelector("span.price-update")).getText();
-
             tempList.add(new Product(name, price));
         }
 

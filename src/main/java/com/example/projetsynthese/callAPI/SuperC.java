@@ -28,7 +28,6 @@ public class SuperC {
             Document document = connectionForPages.get();
             Elements lastPage = document.select("a.ppn--element");
             nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).text());
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
