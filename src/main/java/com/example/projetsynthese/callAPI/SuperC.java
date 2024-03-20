@@ -28,9 +28,15 @@ public class SuperC {
         for (Element div : productDivs) {
             String name = div.select("div.head__title").text();
             String price = div.select("span.price-update").text();
-
-            Product product = new Product(name, price);
+            String gram = div.select("span.head__unit-details").text();
+            String pricePerHundGram = div.select("div.pricing__secondary-price > span:first-child").text();
+            String image = div.select("img").get(1).attr("src");
+            String priceDiscount = div.select("div.promo-price").text();
+            boolean isDiscountedThisWeek = !div.select("div.promo-price").text().isEmpty();
+            String brand = div.select("span.head__brand").text();
+            Product product = new Product(name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
             tempList.add(product);
+            System.out.println(product);
         }
 
         synchronized (produits) {
