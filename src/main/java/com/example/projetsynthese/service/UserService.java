@@ -34,7 +34,7 @@ public class UserService {
         nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).getText());
         getLastPageDriver.quit();
 
-        int nbThread = 4;
+        int nbThread = 1;
 
         Thread[] threads = new Thread[nbThread];
         for (int i = 0; i < nbThread; i++){

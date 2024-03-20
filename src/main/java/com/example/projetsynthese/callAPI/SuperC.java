@@ -36,7 +36,6 @@ public class SuperC {
             String brand = div.select("span.head__brand").text();
             Product product = new Product(name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
             tempList.add(product);
-            System.out.println(product);
         }
 
         synchronized (produits) {

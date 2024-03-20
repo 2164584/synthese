@@ -18,8 +18,7 @@ public class ProjetsyntheseApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		UserService userService = new UserService();
-		userService.getSupercDatas();
-
+		userService.getMetroDatas();
 		System.out.println("Running...");
 	}
 
