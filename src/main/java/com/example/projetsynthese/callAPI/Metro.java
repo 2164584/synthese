@@ -56,6 +56,6 @@ public class Metro {
         synchronized (produits){
             produits.addAll(tempList);
         }
-        System.out.println(produits.size());
+        System.out.println("Metro: " + produits.size());
     }
 }

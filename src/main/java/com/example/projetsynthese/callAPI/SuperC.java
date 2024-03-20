@@ -41,7 +41,7 @@ public class SuperC {
         synchronized (produits) {
             produits.addAll(tempList);
         }
-        System.out.println(produits.size());
+        System.out.println("Super C: " + produits.size());
     }
 
     public void setId(Long id) {
