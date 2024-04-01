@@ -1,49 +1,25 @@
 import './App.css';
-import Item from "./component/Item";
+import Item from "./model/Item";
 import ItemList from "./component/ItemList";
 import axios from "axios";
-import Pomme from "./image/apple.jpg"
-import Avocat from "./image/avocat.jpg"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 
 function App() {
-
+    const [itemList, setItemList] = useState([new Item()]);
     useEffect(() => {
         axiosInstance.get('/products/superc')
             .then(res => {
-                console.log(res.data)
+                setItemList(res.data.map(item => {
+                    let newItem = new Item()
+                    newItem.init(item)
+                    return newItem
+                }))
             })
             .catch(err => {
                 console.log(err)
             })
     }, []);
-
-
-  let itemList = [
-      {
-          image: Pomme,
-          name: 'Pommes',
-          brand: 'Brand A',
-          price: 10.99,
-          gram: '100g',
-          pricePerHundGram: 5.50,
-          discountPrice: 9.99,
-          isDiscountedThisWeek: true,
-          isDiscountedNextWeek: false
-      },
-      {
-          image: Avocat,
-          name: 'Avocats',
-          brand: 'Brand B',
-          price: 5.99,
-          gram: '150g',
-          pricePerHundGram: 4.00,
-          discountPrice: 4.49,
-          isDiscountedThisWeek: false,
-          isDiscountedNextWeek: true
-      }
-  ]
 
 
   return (

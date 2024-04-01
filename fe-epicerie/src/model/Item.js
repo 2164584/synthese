@@ -8,6 +8,18 @@ class Item{
     discountPrice
     isDiscountedThisWeek
     isDiscountedNextWeek
+
+    init(data){
+        this.image = data.image
+        this.name = data.name
+        this.brand = data.brand
+        this.price = data.price
+        this.gram = data.gram
+        this.pricePerHundGram = data.pricePerHundGram
+        this.discountPrice = data.discountPrice
+        this.isDiscountedThisWeek = data.isDiscountedThisWeek
+        this.isDiscountedNextWeek = data.isDiscountedNextWeek
+    }
     constructor() {}
 }
 export default Item;
