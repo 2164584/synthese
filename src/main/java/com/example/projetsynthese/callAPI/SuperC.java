@@ -1,26 +1,82 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuperC {
-    private Long id;
+    public static boolean isDoneFetching = false;
+    public static boolean isFecthing = false;
+    public static final String URL = "https://www.superc.ca/recherche";
+    private static List<Product> produits = new ArrayList<>();
 
-    public boolean isDoneFetching = false;
-    public final String URL = "https://www.superc.ca/recherche";
-    private List<Product> produits = new ArrayList<>();
-
-    public SuperC(){}
+    public SuperC(){
+        if (!isDoneFetching && !isFecthing){
+            getSupercDatas();
+        }
+    }
 
     public List<Product> getProduits() {
         return produits;
     }
 
-    public void transferToArray(Document doc) {
+    private static void getSupercDatas() {
+        isFecthing = true;
+        int nbPageMax;
+
+        Connection connectionForPages = Jsoup.connect(URL);
+        try {
+            Document document = connectionForPages.get();
+            Elements lastPage = document.select("a.ppn--element");
+            nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).text());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(nbPageMax);
+
+        int nbThread = 8;
+
+        Thread[] threads = new Thread[nbThread];
+        for (int i = 0; i < nbThread; i++){
+            final int start = i * (nbPageMax / nbThread);
+            final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
+            threads[i] = new Thread(() -> {
+                for (int j = start; j < end; j++){
+                    String urlToFetch = URL +"-page-"+j;
+
+                    Connection connection = Jsoup.connect(urlToFetch);
+                    Document doc;
+                    try {
+                        doc = connection.get();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    transferToArray(doc);
+                }
+            });
+            threads[i].start();
+        }
+
+        for (int i = 0; i < nbThread; i++){
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        isDoneFetching = true;
+        isFecthing = false;
+    }
+
+    public static void transferToArray(Document doc) {
         Elements productDivs = doc.select("div.tile-product");
 
         List<Product> tempList = new ArrayList<>();
@@ -42,13 +98,5 @@ public class SuperC {
             produits.addAll(tempList);
         }
         System.out.println("Super C: " + produits.size());
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

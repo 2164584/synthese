@@ -1,14 +1,25 @@
 package com.example.projetsynthese.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Product {
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("image")
     private String image;
+    @JsonProperty("brand")
     private String brand;
+    @JsonProperty("price")
     private String price;
+    @JsonProperty("gram")
     private String gram;
+    @JsonProperty("pricePerHundGram")
     private String pricePerHundGram;
+    @JsonProperty("discoutPrice")
     private String discoutPrice;
+    @JsonProperty("isDiscountedThisWeek")
     private boolean isDiscountedThisWeek;
+    @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
 
     public Product(String name, String image, String brand, String price, String gram, String pricePerHundGram, String discoutPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {

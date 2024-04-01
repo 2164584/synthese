@@ -1,11 +1,24 @@
 import './App.css';
 import Item from "./component/Item";
 import ItemList from "./component/ItemList";
+import axios from "axios";
 import Pomme from "./image/apple.jpg"
 import Avocat from "./image/avocat.jpg"
+import {useEffect} from "react";
 
 
 function App() {
+
+    useEffect(() => {
+        axiosInstance.get('/products/superc')
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, []);
+
 
   let itemList = [
       {
@@ -52,3 +65,12 @@ function App() {
 }
 
 export default App;
+export const baseURL = "http://localhost:8080"
+export const axiosInstance = axios.create({
+    baseURL: baseURL,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    params: {}
+})

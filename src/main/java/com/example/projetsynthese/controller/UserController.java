@@ -18,11 +18,16 @@ public class UserController {
     }
     @GetMapping("/superc")
     public List<Product> getAllSupercProducts() {
-        return userService.getSupercDatas();
+        return userService.getSuperCProduct();
     }
 
     @GetMapping("/metro")
     public List<Product> getAllMetroProducts() {
         return userService.getMetroDatas();
+    }
+
+    @GetMapping("/iga")
+    public List<Product> getAllIGAProducts() {
+        return userService.getIGADatas();
     }
 }

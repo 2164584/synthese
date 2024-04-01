@@ -50,7 +50,6 @@ public class Metro {
             String brand = productTile.findElement(By.cssSelector("span.head__brand")).getText();
             Product product = new Product(name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
             tempList.add(product);
-            System.out.println(product);
         }
 
         synchronized (produits){
