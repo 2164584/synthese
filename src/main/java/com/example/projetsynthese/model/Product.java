@@ -15,21 +15,21 @@ public class Product {
     private String gram;
     @JsonProperty("pricePerHundGram")
     private String pricePerHundGram;
-    @JsonProperty("discoutPrice")
-    private String discoutPrice;
+    @JsonProperty("discountPrice")
+    private String discountPrice;
     @JsonProperty("isDiscountedThisWeek")
     private boolean isDiscountedThisWeek;
     @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
 
-    public Product(String name, String image, String brand, String price, String gram, String pricePerHundGram, String discoutPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
+    public Product(String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
         this.name = name;
         this.image = image;
         this.brand = brand;
         this.price = price;
         this.gram = gram;
         this.pricePerHundGram = pricePerHundGram;
-        this.discoutPrice = discoutPrice;
+        this.discountPrice = discountPrice;
         this.isDiscountedThisWeek = isDiscountedThisWeek;
         this.isDiscountedNextWeek = isDiscountedNextWeek;
     }
@@ -48,7 +48,7 @@ public class Product {
                 ", price='" + price + '\'' +
                 ", gram=" + gram +
                 ", pricePerHundGram='" + pricePerHundGram + '\'' +
-                ", discoutPrice='" + discoutPrice + '\'' +
+                ", discoutPrice='" + discountPrice + '\'' +
                 ", isDiscountedThisWeek=" + isDiscountedThisWeek +
                 ", isDiscountedNextWeek=" + isDiscountedNextWeek +
                 '}';

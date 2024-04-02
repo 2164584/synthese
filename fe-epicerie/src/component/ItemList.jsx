@@ -1,7 +1,6 @@
 import Item from "./Item";
 
 function ItemList({itemList}) {
-    console.log(itemList)
   return (
       <div className='row'>
           <div className="col-12">
