@@ -26,7 +26,7 @@ function App() {
     <div className="container-fluid bg-light">
       <div className='row'>
         <div className='col-12'>
-          <h1 className='text-info text-center fw-light'>
+          <h1 className='text-info text-center fw-light my-2'>
             Épicerie
           </h1>
         </div>

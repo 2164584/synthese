@@ -19,7 +19,7 @@ public class Metro {
 
     public Metro() {
         if (!isDoneFetching && !isFecthing){
-            getMetroDatas();
+            //getMetroDatas();
         }
     }
 

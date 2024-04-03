@@ -2,7 +2,7 @@ function Item({item, index}) {
     console.log(item)
     return (
         <div key={index} className="col-3 mb-2">
-            <div className="p-2 border border-2 rounded">
+            <div className="p-2 border border-2 rounded bg-white">
                 <img src={item.image} alt={item.name} className="w-100"/>
                 <div>
                     <div className="fs-5">{item.name}</div>
@@ -26,6 +26,7 @@ function Item({item, index}) {
                                     </div>
                             }
                         </div>
+                        <button className="mx-auto mt-2 col-10 btn btn-primary">Ajouter</button>
 
                     </div>
                 </div>
