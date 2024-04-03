@@ -22,7 +22,7 @@ public class IGA {
 
     public IGA(){
         if (!isDoneFetching && !isFetching){
-            //getIGADatas();
+            getIGADatas();
         }
     }
 
@@ -39,7 +39,7 @@ public class IGA {
         System.out.println(nbPageMax);
         getLastPageDriver.quit();
 
-        int nbThread = 8;
+        int nbThread = 4;
 
 
         Thread[] threads = new Thread[nbThread];
@@ -104,7 +104,7 @@ public class IGA {
             } catch (NoSuchElementException e) {
                 pricePerHundGram = price + " / " + gram;
             }
-            Product product = new Product(1L, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
+            Product product = new Product("iga1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
             tempList.add(product);
         }
 

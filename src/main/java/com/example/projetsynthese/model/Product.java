@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Product {
     @Id
     @JsonProperty("id")
-    private Long id;
+    private String id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("image")
@@ -32,7 +32,7 @@ public class Product {
     @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
 
-    public Product(Long id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
+    public Product(String id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
         this.id = id;
         this.name = name;
         this.image = image;
