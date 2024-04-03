@@ -32,7 +32,10 @@ public class Product {
     @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
 
-    public Product(String id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
+    @JsonProperty("manufacturer")
+    private String manufacturer;
+
+    public Product(String id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek, String manufacturer) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -43,6 +46,7 @@ public class Product {
         this.discountPrice = discountPrice;
         this.isDiscountedThisWeek = isDiscountedThisWeek;
         this.isDiscountedNextWeek = isDiscountedNextWeek;
+        this.manufacturer = manufacturer;
     }
 
     public Product(String name, String price){
@@ -63,6 +67,7 @@ public class Product {
                 ", discoutPrice='" + discountPrice + '\'' +
                 ", isDiscountedThisWeek=" + isDiscountedThisWeek +
                 ", isDiscountedNextWeek=" + isDiscountedNextWeek +
+                ", manufacturer='" + manufacturer + '\'' +
                 '}';
     }
 }

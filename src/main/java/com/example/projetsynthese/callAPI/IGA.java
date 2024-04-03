@@ -104,7 +104,7 @@ public class IGA {
             } catch (NoSuchElementException e) {
                 pricePerHundGram = price + " / " + gram;
             }
-            Product product = new Product("iga1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false);
+            Product product = new Product("iga1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "IGA");
             tempList.add(product);
         }
 

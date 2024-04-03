@@ -8,6 +8,7 @@ class Item{
     discountPrice
     isDiscountedThisWeek
     isDiscountedNextWeek
+    manufacturer
 
     init(data){
         this.image = data.image
@@ -19,6 +20,7 @@ class Item{
         this.discountPrice = data.discountPrice
         this.isDiscountedThisWeek = data.isDiscountedThisWeek
         this.isDiscountedNextWeek = data.isDiscountedNextWeek
+        this.manufacturer = data.manufacturer
     }
     constructor() {}
 }

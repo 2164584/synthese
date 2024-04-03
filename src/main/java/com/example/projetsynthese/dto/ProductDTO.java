@@ -12,6 +12,7 @@ public class ProductDTO {
     private String gram;
     private String discountPrice;
     private boolean isDiscountedThisWeek;
+    private String manufacturer;
 
     public String toString() {
         return "ProductDTO{" +
@@ -23,6 +24,7 @@ public class ProductDTO {
                 ", gram='" + gram + '\'' +
                 ", discountPrice='" + discountPrice + '\'' +
                 ", isDiscountedThisWeek='" + isDiscountedThisWeek + '\'' +
+                ", manufacturer='" + manufacturer + '\''+
                 '}';
     }
 }
