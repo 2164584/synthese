@@ -2,7 +2,6 @@ package com.example.projetsynthese.controller;
 
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.service.UserService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

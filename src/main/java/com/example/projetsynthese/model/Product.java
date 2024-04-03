@@ -1,8 +1,18 @@
 package com.example.projetsynthese.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor
+@Table(name = "product")
 public class Product {
+    @Id
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("image")
@@ -22,7 +32,8 @@ public class Product {
     @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
 
-    public Product(String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
+    public Product(Long id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.brand = brand;
