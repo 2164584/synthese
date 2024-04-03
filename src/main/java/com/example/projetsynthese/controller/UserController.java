@@ -26,11 +26,11 @@ public class UserController {
 
     @GetMapping("/metro")
     public List<Product> getAllMetroProducts() {
-        return userService.getMetroDatas();
+        return userService.getMetroProduct();
     }
 
     @GetMapping("/iga")
     public List<Product> getAllIGAProducts() {
-        return userService.getIGADatas();
+        return userService.getIGAProduct();
     }
 }

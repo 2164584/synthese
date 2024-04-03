@@ -8,23 +8,69 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IGA {
-    public boolean isDoneFetching = false;
-    public final String URL = "https://www.iga.net/fr/search?page=";
-    public final String URL_AFTER_PAGE = "&pageSize=24";
-    private List<Product> produits = new ArrayList<>();
+    public static boolean isDoneFetching = false;
+    public static boolean isFetching = false;
+    public static final String URL = "https://www.iga.net/fr/search?page=";
+    public static final String URL_AFTER_PAGE = "&pageSize=24";
+    private static List<Product> produits = new ArrayList<>();
 
-    public IGA(){}
+    public IGA(){
+        if (!isDoneFetching && !isFetching){
+            getIGADatas();
+        }
+    }
 
     public List<Product> getProduits() {
         return produits;
     }
 
-    public void transferToArray(WebDriver driver) {
+    public static void getIGADatas(){
+        isFetching = true;
+        int nbPageMax;
+        WebDriver getLastPageDriver = new ChromeDriver();
+        getLastPageDriver.get(URL + "1" + URL_AFTER_PAGE);
+        nbPageMax = Integer.parseInt(getLastPageDriver.findElement(By.cssSelector("a.icon--arrow-skinny-right-double")).getAttribute("href").split("=")[1].split("&")[0]);
+        System.out.println(nbPageMax);
+        getLastPageDriver.quit();
+
+        int nbThread = 8;
+
+
+        Thread[] threads = new Thread[nbThread];
+        for (int i = 0; i < nbThread; i++){
+            final int start = i * (nbPageMax / nbThread);
+            final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
+            threads[i] = new Thread(() -> {
+                for (int j = start; j < end; j++){
+                    String urlToFetch = URL + (j+1) + URL_AFTER_PAGE;
+                    WebDriver driver = new ChromeDriver();
+                    driver.get(urlToFetch);
+                    transferToArray(driver);
+                    driver.quit();
+                }
+            });
+            threads[i].start();
+        }
+
+        for (int i = 0; i < nbThread; i++){
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        isDoneFetching = true;
+        isFetching = false;
+    }
+
+    public static void transferToArray(WebDriver driver) {
         List<Product> tempList = new ArrayList<>();
         List<WebElement> productTiles = driver.findElements(By.cssSelector("div.item-product__content"));
         for (WebElement productTile : productTiles) {
