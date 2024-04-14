@@ -1,33 +1,36 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
+import com.example.projetsynthese.repository.SuperCRepository;
+import lombok.Getter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@Getter
 public class SuperC {
-    public static boolean isDoneFetching = false;
-    public static boolean isFecthing = false;
-    public static final String URL = "https://www.superc.ca/recherche";
-    private static List<Product> produits = new ArrayList<>();
+    @Autowired
+    private SuperCRepository superCRepository;
+    public boolean isDoneFetching = false;
+    public boolean isFecthing = false;
+    public final String URL = "https://www.superc.ca/recherche";
+
+    private List<Product> produits = new ArrayList<>();
 
     public SuperC(){
-        if (!isDoneFetching && !isFecthing){
-            getSupercDatas();
-        }
+        getSupercDatas();
     }
 
-    public List<Product> getProduits() {
-        return produits;
-    }
-
-    private static void getSupercDatas() {
+    private void getSupercDatas() {
         isFecthing = true;
         int nbPageMax;
 
@@ -76,12 +79,13 @@ public class SuperC {
         isFecthing = false;
     }
 
-    public static void transferToArray(Document doc) {
+    public void transferToArray(Document doc) {
         Elements productDivs = doc.select("div.tile-product");
 
         List<Product> tempList = new ArrayList<>();
 
         for (Element div : productDivs) {
+            String id = "sc"+ div.attr("data-product-code");
             String name = div.select("div.head__title").text();
             String priceDiscount = div.select("div.promo-price").text();
             boolean isDiscountedThisWeek = !div.select("div.promo-price").text().isEmpty();
@@ -97,13 +101,12 @@ public class SuperC {
             String image = div.select("img").get(1).attr("src");
 
             String brand = div.select("span.head__brand").text();
-            Product product = new Product("superc1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Super C");
-            tempList.add(product);
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Super C");
+            superCRepository.save(product);
+
+            System.out.println(product);
         }
 
-        synchronized (produits) {
-            produits.addAll(tempList);
-        }
         System.out.println("Super C: " + produits.size());
     }
 }

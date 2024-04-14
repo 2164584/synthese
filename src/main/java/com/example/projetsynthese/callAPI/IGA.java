@@ -22,7 +22,7 @@ public class IGA {
 
     public IGA(){
         if (!isDoneFetching && !isFetching){
-            getIGADatas();
+            //getIGADatas();
         }
     }
 

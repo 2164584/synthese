@@ -49,11 +49,6 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
-    public Product(String name, String price){
-        this.name = name;
-        this.price = price;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
