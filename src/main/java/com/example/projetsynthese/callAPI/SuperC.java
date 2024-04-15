@@ -56,7 +56,7 @@ public class SuperC {
         for (int i = 0; i < nbThread; i++){
             final int start = i * (nbPageMax / nbThread);
             final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
-            //threads[i] = new Thread(() -> {
+            threads[i] = new Thread(() -> {
                 for (int j = start; j < end; j++){
                     String urlToFetch = URL +"-page-"+j;
 
@@ -68,28 +68,31 @@ public class SuperC {
                         throw new RuntimeException(e);
                     }
                     transferToArray(doc);
-                    System.out.println("Page " + j + " of " + nbThread + " done.");
                 }
-            //});
-            //threads[i].start();
+            });
+            threads[i].start();
         }
 
-
-        /*
         for (int i = 0; i < nbThread; i++){
             try {
                 threads[i].join();
+                System.out.println("Thread " + (i + 1) + " of " + nbThread + " done");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-         */
 
         isDoneFetching = true;
         isFecthing = false;
+
+        superCRepository.saveAll(produits);
+
+        System.out.println("SuperC done");
     }
 
     public void transferToArray(Document doc) {
+        List<Product> products = new ArrayList<>();
+
         Elements productDivs = doc.select("div.tile-product");
 
         for (Element div : productDivs) {
@@ -110,15 +113,12 @@ public class SuperC {
 
             String brand = div.select("span.head__brand").text();
             Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Super C");
-            superCRepository.save(product);
+            products.add(product);
         }
 
-        /*
-        synchronized (superCRepository) {
-            System.out.println("In transferToArray 1");
-            superCRepository.saveAllAndFlush(produits);
+        synchronized (produits) {
+            produits.addAll(products);
         }
-         */
 
     }
 }
