@@ -3,6 +3,7 @@ package com.example.projetsynthese.callAPI;
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.repository.SuperCRepository;
 import lombok.Getter;
+import org.apache.catalina.core.ApplicationContext;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,19 +19,24 @@ import java.util.List;
 @Component
 @Getter
 public class SuperC {
-    @Autowired
-    private SuperCRepository superCRepository;
+    private final SuperCRepository superCRepository;
+
     public boolean isDoneFetching = false;
     public boolean isFecthing = false;
     public final String URL = "https://www.superc.ca/recherche";
 
     private List<Product> produits = new ArrayList<>();
 
-    public SuperC(){
+    @Autowired
+    public SuperC(SuperCRepository superCRepository) {
+        this.superCRepository = superCRepository;
         getSupercDatas();
     }
 
+
+
     private void getSupercDatas() {
+
         isFecthing = true;
         int nbPageMax;
 
@@ -50,7 +56,7 @@ public class SuperC {
         for (int i = 0; i < nbThread; i++){
             final int start = i * (nbPageMax / nbThread);
             final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
-            threads[i] = new Thread(() -> {
+            //threads[i] = new Thread(() -> {
                 for (int j = start; j < end; j++){
                     String urlToFetch = URL +"-page-"+j;
 
@@ -62,11 +68,14 @@ public class SuperC {
                         throw new RuntimeException(e);
                     }
                     transferToArray(doc);
+                    System.out.println("Page " + j + " of " + nbThread + " done.");
                 }
-            });
-            threads[i].start();
+            //});
+            //threads[i].start();
         }
 
+
+        /*
         for (int i = 0; i < nbThread; i++){
             try {
                 threads[i].join();
@@ -74,6 +83,7 @@ public class SuperC {
                 e.printStackTrace();
             }
         }
+         */
 
         isDoneFetching = true;
         isFecthing = false;
@@ -81,8 +91,6 @@ public class SuperC {
 
     public void transferToArray(Document doc) {
         Elements productDivs = doc.select("div.tile-product");
-
-        List<Product> tempList = new ArrayList<>();
 
         for (Element div : productDivs) {
             String id = "sc"+ div.attr("data-product-code");
@@ -103,10 +111,14 @@ public class SuperC {
             String brand = div.select("span.head__brand").text();
             Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Super C");
             superCRepository.save(product);
-
-            System.out.println(product);
         }
 
-        System.out.println("Super C: " + produits.size());
+        /*
+        synchronized (superCRepository) {
+            System.out.println("In transferToArray 1");
+            superCRepository.saveAllAndFlush(produits);
+        }
+         */
+
     }
 }

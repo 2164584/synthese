@@ -4,6 +4,8 @@ import com.example.projetsynthese.callAPI.IGA;
 import com.example.projetsynthese.callAPI.Metro;
 import com.example.projetsynthese.callAPI.SuperC;
 import com.example.projetsynthese.model.Product;
+import com.example.projetsynthese.repository.SuperCRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private SuperC superC = new SuperC();
-    private Metro metro = new Metro();
-    private IGA iga = new IGA();
+    @Autowired
+    private SuperC superC;
+    @Autowired
+    private Metro metro;
+    @Autowired
+    private IGA iga;
 
     public UserService() {
     }
