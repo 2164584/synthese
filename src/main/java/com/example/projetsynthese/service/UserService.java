@@ -35,4 +35,8 @@ public class UserService {
         return superC.getProduits();
     }
 
+    public void updateSuperCProduct(){
+        superC.getSupercDatas();
+    }
+
 }

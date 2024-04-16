@@ -3,10 +3,8 @@ package com.example.projetsynthese.controller;
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +21,12 @@ public class UserController {
     @GetMapping("/superc")
     public List<Product> getAllSupercProducts() {
         return userService.getSuperCProduct();
+    }
+
+    @PostMapping("/update-superc")
+    public ResponseEntity<String> updateSupercProducts() {
+        userService.updateSuperCProduct();
+        return ResponseEntity.ok("SuperC products updated successfully");
     }
 
     @GetMapping("/metro")

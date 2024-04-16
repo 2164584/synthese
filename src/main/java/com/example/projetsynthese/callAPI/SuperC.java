@@ -3,7 +3,6 @@ package com.example.projetsynthese.callAPI;
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.repository.SuperCRepository;
 import lombok.Getter;
-import org.apache.catalina.core.ApplicationContext;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,12 +29,11 @@ public class SuperC {
     @Autowired
     public SuperC(SuperCRepository superCRepository) {
         this.superCRepository = superCRepository;
-        getSupercDatas();
     }
 
 
 
-    private void getSupercDatas() {
+    public void getSupercDatas() {
 
         isFecthing = true;
         int nbPageMax;
