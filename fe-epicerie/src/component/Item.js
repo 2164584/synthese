@@ -1,5 +1,4 @@
 function Item({item, index}) {
-    console.log(item)
     return (
         <div key={index} className="col-3 mb-2">
             <div className="p-2 border border-2 rounded bg-white">

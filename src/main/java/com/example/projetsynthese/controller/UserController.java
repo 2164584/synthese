@@ -1,5 +1,6 @@
 package com.example.projetsynthese.controller;
 
+import com.example.projetsynthese.dto.ProductDTO;
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
 
 
     @GetMapping("/superc")
-    public List<Product> getAllSupercProducts() {
+    public List<ProductDTO> getAllSupercProducts() {
         return userService.getSuperCProduct();
     }
 

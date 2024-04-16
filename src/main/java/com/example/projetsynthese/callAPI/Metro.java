@@ -1,35 +1,35 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
+import com.example.projetsynthese.repository.ProductRepository;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Component
 public class Metro {
+    private static ProductRepository productRepository;
 
-    public static boolean isDoneFetching = false;
     public static boolean isFecthing = false;
     public static final String URL = "https://www.metro.ca/epicerie-en-ligne/recherche";
     private static List<Product> produits = new ArrayList<>();
 
-    public Metro() {
-        if (!isDoneFetching && !isFecthing){
-            //getMetroDatas();
-        }
-    }
-
-    public List<Product> getProduits() {
-        return produits;
+    @Autowired
+    public Metro(ProductRepository productRepository) {
+        Metro.productRepository = productRepository;
     }
 
     private static void getMetroDatas(){
+        produits.clear();
         isFecthing = true;
         int nbPageMax;
 
@@ -64,8 +64,10 @@ public class Metro {
                 e.printStackTrace();
             }
         }
-        isDoneFetching = true;
         isFecthing = false;
+
+        productRepository.saveAll(produits);
+        System.out.println("Metro is done." );
     }
 
     public static void transferToArray(WebDriver driver){
@@ -99,6 +101,5 @@ public class Metro {
         synchronized (produits){
             produits.addAll(tempList);
         }
-        System.out.println("Metro: " + produits.size());
     }
 }

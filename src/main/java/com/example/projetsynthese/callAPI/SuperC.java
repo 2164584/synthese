@@ -1,7 +1,7 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
-import com.example.projetsynthese.repository.SuperCRepository;
+import com.example.projetsynthese.repository.ProductRepository;
 import lombok.Getter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,23 +18,22 @@ import java.util.List;
 @Component
 @Getter
 public class SuperC {
-    private final SuperCRepository superCRepository;
+    private static ProductRepository productRepository;
 
-    public boolean isDoneFetching = false;
-    public boolean isFecthing = false;
-    public final String URL = "https://www.superc.ca/recherche";
+    public static boolean isFecthing = false;
+    public static final String URL = "https://www.superc.ca/recherche";
 
-    private List<Product> produits = new ArrayList<>();
+    @Getter
+    private static List<Product> produits = new ArrayList<>();
 
     @Autowired
-    public SuperC(SuperCRepository superCRepository) {
-        this.superCRepository = superCRepository;
+    public SuperC(ProductRepository productRepository) {
+        SuperC.productRepository = productRepository;
     }
 
 
-
-    public void getSupercDatas() {
-
+    public static void getSupercDatas() {
+        produits.clear();
         isFecthing = true;
         int nbPageMax;
 
@@ -74,21 +73,17 @@ public class SuperC {
         for (int i = 0; i < nbThread; i++){
             try {
                 threads[i].join();
-                System.out.println("Thread " + (i + 1) + " of " + nbThread + " done");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-        isDoneFetching = true;
         isFecthing = false;
 
-        superCRepository.saveAll(produits);
-
-        System.out.println("SuperC done");
+        productRepository.saveAll(produits);
+        System.out.println("Super C is done." );
     }
 
-    public void transferToArray(Document doc) {
+    public static void transferToArray(Document doc) {
         List<Product> products = new ArrayList<>();
 
         Elements productDivs = doc.select("div.tile-product");

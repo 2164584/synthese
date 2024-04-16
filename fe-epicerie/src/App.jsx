@@ -7,8 +7,9 @@ import {useEffect, useState} from "react";
 
 function App() {
     const [itemList, setItemList] = useState([new Item()]);
-    useEffect(() => {
-        axiosInstance.get('/products/superc')
+
+    function getSuperCProducts() {
+         axiosInstance.get('/products/superc')
             .then(res => {
                 setItemList(res.data.map(item => {
                     let newItem = new Item()
@@ -19,6 +20,10 @@ function App() {
             .catch(err => {
                 console.log(err)
             })
+    }
+
+    useEffect(() => {
+        getSuperCProducts()
     }, []);
 
 
@@ -33,7 +38,7 @@ function App() {
       </div>
         <div className="row">
             <div className="col-8 mx-auto">
-                <ItemList itemList={itemList}/>
+                <ItemList itemList={itemList} getSperCProducts={getSuperCProducts}/>
             </div>
         </div>
     </div>
