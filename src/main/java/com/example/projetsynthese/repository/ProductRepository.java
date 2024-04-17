@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.manufacturer = 'Super C'")
-    List<ProductDTO> findAllWithManufacturerSuperC();
+    List<Product> findAllWithManufacturerSuperC();
+
+    @Query("SELECT p FROM Product p WHERE p.manufacturer = 'Metro'")
+    List<Product> findAllWithManufacturerMetro();
 }

@@ -21,6 +21,7 @@ public class Metro {
 
     public static boolean isFecthing = false;
     public static final String URL = "https://www.metro.ca/epicerie-en-ligne/recherche";
+    @Getter
     private static List<Product> produits = new ArrayList<>();
 
     @Autowired
@@ -28,7 +29,7 @@ public class Metro {
         Metro.productRepository = productRepository;
     }
 
-    private static void getMetroDatas(){
+    public static void getMetroDatas(){
         produits.clear();
         isFecthing = true;
         int nbPageMax;
@@ -38,8 +39,9 @@ public class Metro {
         List<WebElement> lastPage = getLastPageDriver.findElements(By.cssSelector("a.ppn--element"));
         nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).getText());
         getLastPageDriver.quit();
+        System.out.println(nbPageMax);
 
-        int nbThread = 8;
+        int nbThread = 4;
 
         Thread[] threads = new Thread[nbThread];
         for (int i = 0; i < nbThread; i++){
@@ -88,13 +90,14 @@ public class Metro {
             } catch (NoSuchElementException e) {
                 priceDiscount = "";
             }
+            String id = "m" + productTile.getAttribute("data-product-code");
 
             String name = productTile.findElement(By.cssSelector("div.head__title")).getText();
             String price = productTile.findElement(By.cssSelector("span.price-update")).getText();
             String pricePerHundGram = productTile.findElement(By.cssSelector("div.pricing__secondary-price > span:first-child")).getText();
             String image = productTile.findElement(By.cssSelector("img")).getAttribute("src");
             String brand = productTile.findElement(By.cssSelector("span.head__brand")).getText();
-            Product product = new Product("metro1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Metro");
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Metro");
             tempList.add(product);
         }
 

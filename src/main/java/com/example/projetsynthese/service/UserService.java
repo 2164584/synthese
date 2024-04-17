@@ -18,8 +18,6 @@ public class UserService {
     private ProductRepository productRepository;
 
     @Autowired
-    private Metro metro;
-    @Autowired
     private IGA iga;
 
     public UserService() {
@@ -30,16 +28,21 @@ public class UserService {
     }
 
     public List<Product> getMetroProduct() {
-        return metro.getProduits();
+        return productRepository.findAllWithManufacturerMetro();
     }
 
-    public List<ProductDTO> getSuperCProduct(){
+    public List<Product> getSuperCProduct(){
         return productRepository.findAllWithManufacturerSuperC();
     }
 
     public void updateSuperCProduct(){
         if(!SuperC.isFecthing)
             SuperC.getSupercDatas();
+    }
+
+    public void updateMetroProduct(){
+        if(!Metro.isFecthing)
+            Metro.getMetroDatas();
     }
 
 }

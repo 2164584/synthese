@@ -20,7 +20,7 @@ public class UserController {
 
 
     @GetMapping("/superc")
-    public List<ProductDTO> getAllSupercProducts() {
+    public List<Product> getAllSupercProducts() {
         return userService.getSuperCProduct();
     }
 
@@ -28,6 +28,12 @@ public class UserController {
     public ResponseEntity<String> updateSupercProducts() {
         userService.updateSuperCProduct();
         return ResponseEntity.ok("SuperC products updated successfully");
+    }
+
+    @PostMapping("/update-metro")
+    public ResponseEntity<String> updateMetroProducts() {
+        userService.updateMetroProduct();
+        return ResponseEntity.ok("Metro products updated successfully");
     }
 
     @GetMapping("/metro")

@@ -6,12 +6,16 @@ import {useEffect, useState} from "react";
 
 
 function App() {
+    const [scProducts, setScProducts] = useState([new Item()]);
+    const [metroProducts, setMetroProducts] = useState([new Item()]);
+    const [igaProducts, setIgaProducts] = useState([new Item()]);
+    const [maxiProducts, setMaxiProducts] = useState([new Item()]);
     const [itemList, setItemList] = useState([new Item()]);
 
     function getSuperCProducts() {
          axiosInstance.get('/products/superc')
             .then(res => {
-                setItemList(res.data.map(item => {
+                setScProducts(res.data.map(item => {
                     let newItem = new Item()
                     newItem.init(item)
                     return newItem
@@ -22,8 +26,61 @@ function App() {
             })
     }
 
+    function getMetroProducts() {
+        axiosInstance.get('/products/metro')
+            .then(res => {
+                setMetroProducts(res.data.map(item => {
+                    let newItem = new Item()
+                    newItem.init(item)
+                    return newItem
+                }))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    function getIgaProducts() {
+        axiosInstance.get('/products/iga')
+            .then(res => {
+                setIgaProducts(res.data.map(item => {
+                    let newItem = new Item()
+                    newItem.init(item)
+                    return newItem
+                }))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    function getMaxiProducts() {
+        axiosInstance.get('/products/maxi')
+            .then(res => {
+                setMaxiProducts(res.data.map(item => {
+                    let newItem = new Item()
+                    newItem.init(item)
+                    return newItem
+                }))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    function concatAllItems() {
+        setItemList([...scProducts, ...metroProducts, ...igaProducts, ...maxiProducts])
+    }
+
+    useEffect(() => {
+        concatAllItems()
+    }, [scProducts, metroProducts, igaProducts, maxiProducts]);
+
     useEffect(() => {
         getSuperCProducts()
+        getMetroProducts()
+        getIgaProducts()
+        getMaxiProducts()
     }, []);
 
 
@@ -38,7 +95,7 @@ function App() {
       </div>
         <div className="row">
             <div className="col-8 mx-auto">
-                <ItemList itemList={itemList} getSperCProducts={getSuperCProducts}/>
+                <ItemList itemList={itemList} getSuperCProducts={getSuperCProducts} getMetroProducts={getMetroProducts} getIgaProducts={getIgaProducts} getMaxiProducts={getMaxiProducts}/>
             </div>
         </div>
     </div>
