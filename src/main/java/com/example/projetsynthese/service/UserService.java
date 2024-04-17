@@ -15,16 +15,13 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private IGA iga;
+    ProductRepository productRepository;
 
     public UserService() {
     }
 
     public List<Product> getIGAProduct(){
-        return iga.getProduits();
+        return productRepository.findAllWithManufacturerIGA();
     }
 
     public List<Product> getMetroProduct() {
@@ -33,6 +30,10 @@ public class UserService {
 
     public List<Product> getSuperCProduct(){
         return productRepository.findAllWithManufacturerSuperC();
+    }
+
+    public List<Product> getMaxiProduct(){
+        return productRepository.findAllWithManufacturerMaxi();
     }
 
     public void updateSuperCProduct(){
@@ -44,5 +45,17 @@ public class UserService {
         if(!Metro.isFecthing)
             Metro.getMetroDatas();
     }
+
+    public void updateIGAProduct(){
+        if(!IGA.isFetching)
+            IGA.getIGADatas();
+    }
+
+    /*
+    public void updateMaxiProduct(){
+        if(!Maxi.isFecthing)
+            Maxi.getMaxiDatas();
+    }
+     */
 
 }

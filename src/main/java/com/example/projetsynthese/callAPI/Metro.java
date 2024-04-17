@@ -90,8 +90,12 @@ public class Metro {
             } catch (NoSuchElementException e) {
                 priceDiscount = "";
             }
-            String id = "m" + productTile.getAttribute("data-product-code");
-
+            String num = productTile.getAttribute("data-product-code");
+            int i = 0;
+            while (num.charAt(i) == '0') {
+                i++;
+            }
+            String id = "m" + num.substring(i);
             String name = productTile.findElement(By.cssSelector("div.head__title")).getText();
             String price = productTile.findElement(By.cssSelector("span.price-update")).getText();
             String pricePerHundGram = productTile.findElement(By.cssSelector("div.pricing__secondary-price > span:first-child")).getText();

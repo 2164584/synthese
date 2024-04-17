@@ -1,7 +1,9 @@
 package com.example.projetsynthese.callAPI;
 
 import com.example.projetsynthese.model.Product;
+import com.example.projetsynthese.repository.ProductRepository;
 import jakarta.persistence.Id;
+import lombok.Getter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -10,27 +12,26 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Component
 public class IGA {
-    public static boolean isDoneFetching = false;
+    private static ProductRepository productRepository;
+
     public static boolean isFetching = false;
     public static final String URL = "https://www.iga.net/fr/search?page=";
     public static final String URL_AFTER_PAGE = "&pageSize=24";
+    @Getter
     private static List<Product> produits = new ArrayList<>();
 
-    public IGA(){
-        if (!isDoneFetching && !isFetching){
-            //getIGADatas();
-        }
-    }
-
-    public List<Product> getProduits() {
-        return produits;
+    @Autowired
+    public IGA(ProductRepository productRepository){
+        IGA.productRepository = productRepository;
     }
 
     public static void getIGADatas(){
@@ -68,15 +69,22 @@ public class IGA {
                 e.printStackTrace();
             }
         }
-
-        isDoneFetching = true;
         isFetching = false;
+
+        productRepository.saveAll(produits);
+        System.out.println("IGA is done." );
     }
 
     public static void transferToArray(WebDriver driver) {
         List<Product> tempList = new ArrayList<>();
         List<WebElement> productTiles = driver.findElements(By.cssSelector("div.item-product__content"));
         for (WebElement productTile : productTiles) {
+            String num = productTile.findElement(By.cssSelector("a.js-ga-productname")).getAttribute("href").split("_")[1];
+            int i = 0;
+            while (num.charAt(i) == '0') {
+                i++;
+            }
+            String id = "iga" + num.substring(i);
             String gram = "";
             String priceDiscount = "";
             String brand = "";
@@ -107,13 +115,12 @@ public class IGA {
             } catch (NoSuchElementException e) {
                 pricePerHundGram = price + " / " + gram;
             }
-            Product product = new Product("iga1", name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "IGA");
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "IGA");
             tempList.add(product);
         }
 
         synchronized (produits){
             produits.addAll(tempList);
         }
-        System.out.println("IGA: " + produits.size());
     }
 }

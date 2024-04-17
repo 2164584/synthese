@@ -89,7 +89,12 @@ public class SuperC {
         Elements productDivs = doc.select("div.tile-product");
 
         for (Element div : productDivs) {
-            String id = "sc"+ div.attr("data-product-code");
+            String num = div.attr("data-product-code");
+            int i = 0;
+            while (num.charAt(i) == '0') {
+                i++;
+            }
+            String id = "sc"+ num.substring(i);
             String name = div.select("div.head__title").text();
             String priceDiscount = div.select("div.promo-price").text();
             boolean isDiscountedThisWeek = !div.select("div.promo-price").text().isEmpty();

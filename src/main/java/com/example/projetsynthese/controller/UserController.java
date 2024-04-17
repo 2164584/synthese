@@ -30,19 +30,25 @@ public class UserController {
         return ResponseEntity.ok("SuperC products updated successfully");
     }
 
+    @GetMapping("/metro")
+    public List<Product> getAllMetroProducts() {
+        return userService.getMetroProduct();
+    }
+
     @PostMapping("/update-metro")
     public ResponseEntity<String> updateMetroProducts() {
         userService.updateMetroProduct();
         return ResponseEntity.ok("Metro products updated successfully");
     }
 
-    @GetMapping("/metro")
-    public List<Product> getAllMetroProducts() {
-        return userService.getMetroProduct();
-    }
-
     @GetMapping("/iga")
     public List<Product> getAllIGAProducts() {
         return userService.getIGAProduct();
+    }
+
+    @PostMapping("/update-iga")
+    public ResponseEntity<String> updateIGAProducts() {
+        userService.updateIGAProduct();
+        return ResponseEntity.ok("IGA products updated successfully");
     }
 }
