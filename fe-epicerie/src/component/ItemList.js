@@ -6,13 +6,27 @@ import Pagination from "./Pagination";
 function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProducts, getMaxiProducts }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [updateActivated, setUpdateActivated] = useState(true);
+    const [onlyDiscount, setOnlyDiscount] = useState(false);
     const itemsPerPage = 100
+
+    const filterItems = (itemList, onlyDiscount) => {
+        // If `onlyDiscount` is true, filter items based on `isDiscountedThisWeek`
+        if (onlyDiscount) {
+            return itemList.filter(item => item.isDiscountedThisWeek);
+        }
+        // Otherwise, return the full item list
+        return itemList;
+    };
+
+    // Apply the filter to the item list based on the `onlyDiscount` state
+    const filteredItems = filterItems(itemList, onlyDiscount);
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = itemList.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
-    const totalPages = Math.ceil(itemList.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
     const updateSuperC = async () => {
         try {
@@ -79,22 +93,30 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                     <div className="col-2 my-auto">
                         <label htmlFor="superc">Super C</label>
                         <input type="checkbox" name="superc" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated? '' : 'disabled'}`} onClick={updateSuperC}>Update</button>
+                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
+                                onClick={updateSuperC}>Update
+                        </button>
                     </div>
                     <div className="col-2 my-auto">
                         <label htmlFor="maxi">Maxi</label>
                         <input type="checkbox" name="maxi" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated? '' : 'disabled'}`} onClick={updateMaxi}>Update</button>
+                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
+                                onClick={updateMaxi}>Update
+                        </button>
                     </div>
                     <div className="col-2 my-auto">
                         <label htmlFor="iga">IGA</label>
                         <input type="checkbox" name="iga" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated? '' : 'disabled'}`} onClick={updateIga}>Update</button>
+                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
+                                onClick={updateIga}>Update
+                        </button>
                     </div>
                     <div className="col-2 my-auto">
                         <label htmlFor="metro">Metro</label>
                         <input type="checkbox" name="metro" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated? '' : 'disabled'}`} onClick={updateMetro}>Update</button>
+                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
+                                onClick={updateMetro}>Update
+                        </button>
                     </div>
                 </div>
                 {/* Search bar section */}
@@ -106,14 +128,25 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                         <button className="btn btn-primary">Search</button>
                     </div>
                 </div>
+                <div className="row my-2">
+                    <div className="col-3">
+                        <button
+                            className={`btn btn-secondary ${onlyDiscount ? 'active' : ''}`}
+                            onClick={() => setOnlyDiscount(!onlyDiscount)}
+                        >
+                            {onlyDiscount ? 'Show All Items' : 'Show Discounted Items'}
+                        </button>
+                    </div>
+                </div>
                 {/* Item list section */}
                 <div className="row">
                     {currentItems.map((item, index) => (
-                        <Item key={index} item={item} />
+                        <Item key={index} item={item}/>
                     ))}
                 </div>
                 {/* Pagination controls */}
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPrevPage={handlePrevPage} onNextPage={handleNextPage} />
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPrevPage={handlePrevPage}
+                            onNextPage={handleNextPage}/>
             </div>
         </div>
     );
