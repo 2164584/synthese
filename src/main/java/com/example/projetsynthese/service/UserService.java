@@ -1,6 +1,7 @@
 package com.example.projetsynthese.service;
 
 import com.example.projetsynthese.callAPI.IGA;
+import com.example.projetsynthese.callAPI.Maxi;
 import com.example.projetsynthese.callAPI.Metro;
 import com.example.projetsynthese.callAPI.SuperC;
 import com.example.projetsynthese.dto.ProductDTO;
@@ -16,6 +17,9 @@ public class UserService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    Maxi maxi;
 
     public UserService() {
     }
@@ -51,11 +55,9 @@ public class UserService {
             IGA.getIGADatas();
     }
 
-    /*
     public void updateMaxiProduct(){
-        if(!Maxi.isFecthing)
+        if(!Maxi.isFetching)
             Maxi.getMaxiDatas();
     }
-     */
 
 }

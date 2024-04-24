@@ -80,7 +80,7 @@ public class SuperC {
         isFecthing = false;
 
         productRepository.saveAll(produits);
-        System.out.println("Super C is done." );
+        System.out.println("Super C is done.");
     }
 
     public static void transferToArray(Document doc) {

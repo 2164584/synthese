@@ -51,4 +51,15 @@ public class UserController {
         userService.updateIGAProduct();
         return ResponseEntity.ok("IGA products updated successfully");
     }
+
+    @GetMapping("/maxi")
+    public List<Product> getAllMaxiProducts() {
+        return userService.getMaxiProduct();
+    }
+
+    @PostMapping("/update-maxi")
+    public ResponseEntity<String> updateMaxiProducts() {
+        userService.updateMaxiProduct();
+        return ResponseEntity.ok("Maxi products updated successfully");
+    }
 }
