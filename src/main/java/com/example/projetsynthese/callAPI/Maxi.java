@@ -104,12 +104,18 @@ public class Maxi {
             String og = element.findElement(By.cssSelector("p.css-1yftjin")).getText();
             int index = og.indexOf(",");
 
-            if (index > -1 && Character.isDigit(og.charAt(index - 1))) {
-                gram = "Unité variable";
-                pricePerHundGram = og;
-            } else {
-                gram = og.substring(0, index);
-                pricePerHundGram = og.substring(index + 1).trim();
+            if(index > -1) {
+                if (Character.isDigit(og.charAt(index - 1))) {
+                    gram = "Unité variable";
+                    pricePerHundGram = og;
+                } else {
+                    gram = og.substring(0, index);
+                    pricePerHundGram = og.substring(index + 1).trim();
+                }
+            }
+            else{
+                gram = "N/A";
+                pricePerHundGram = "N/A";
             }
 
             String id = "";

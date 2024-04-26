@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Item from './Item';
 import {axiosInstance} from "../App";
 import Pagination from "./Pagination";
@@ -7,20 +7,35 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     const [currentPage, setCurrentPage] = useState(1);
     const [updateActivated, setUpdateActivated] = useState(true);
     const [onlyDiscount, setOnlyDiscount] = useState(false);
+    const [checkboxes, setCheckboxes] = useState({
+        SuperC: true,
+        Maxi: true,
+        IGA: true,
+        Metro: true
+    });
     const itemsPerPage = 100
+    useEffect(() => {
+        // Update the state of checkboxes
+        setCheckboxes(prevState => ({
+            ...prevState,
+            SuperC: true,
+            Maxi: true,
+            IGA: true,
+            Metro: true
+        }));
+    }, []);
 
-    const filterItems = (itemList, onlyDiscount) => {
-        // If `onlyDiscount` is true, filter items based on `isDiscountedThisWeek`
-        if (onlyDiscount) {
-            return itemList.filter(item => item.isDiscountedThisWeek);
-        }
-        // Otherwise, return the full item list
-        return itemList;
+    const filterItems = (itemList, onlyDiscount, checkboxes) => {
+        // Filter items based on the checked categories and manufacturer field
+        return itemList.filter(item => {
+            const isManufacturerChecked = checkboxes[item.manufacturer];
+            const isDiscounted = !onlyDiscount || item.isDiscountedThisWeek;
+            return isManufacturerChecked && isDiscounted;
+        });
     };
 
     // Apply the filter to the item list based on the `onlyDiscount` state
-    const filteredItems = filterItems(itemList, onlyDiscount);
-
+    const filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -28,49 +43,19 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
 
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
-    const updateSuperC = async () => {
+    const updateProducts = async (endpoint, getProduct) => {
+        console.log('Updating products...');
+        console.log('Endpoint:', endpoint);
+        console.log('getProduct:', getProduct);
         try {
-            setUpdateActivated(false)
-            await axiosInstance.post('/products/update-superc');
-            getSuperCProducts();
-            setUpdateActivated(true)
+            setUpdateActivated(false);
+            await axiosInstance.post(endpoint);
+            getProduct();
+            setUpdateActivated(true);
         } catch (error) {
-            console.error('Error updating SuperC products:', error);
+            console.error(`Error updating products: ${error}`);
         }
     };
-
-    const updateMetro = async () => {
-        try {
-            setUpdateActivated(false)
-            await axiosInstance.post('/products/update-metro');
-            getMetroProducts();
-            setUpdateActivated(true)
-        } catch (error) {
-            console.error('Error updating Metro products:', error);
-        }
-    }
-
-    const updateIga = async () => {
-        try {
-            setUpdateActivated(false)
-            await axiosInstance.post('/products/update-iga');
-            getIgaProducts();
-            setUpdateActivated(true)
-        } catch (error) {
-            console.error('Error updating IGA products:', error);
-        }
-    }
-
-    const updateMaxi = async () => {
-        try {
-            setUpdateActivated(false)
-            await axiosInstance.post('/products/update-maxi');
-            getMaxiProducts();
-            setUpdateActivated(true)
-        } catch (error) {
-            console.error('Error updating Maxi products:', error);
-        }
-    }
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -87,46 +72,43 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     return (
         <div className='row'>
             <div className="col-12">
-                {/* Header section */}
                 <div className="row my-2">
                     <h2 className="col-2">Items</h2>
-                    <div className="col-2 my-auto">
-                        <label htmlFor="superc">Super C</label>
-                        <input type="checkbox" name="superc" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
-                                onClick={updateSuperC}>Update
-                        </button>
-                    </div>
-                    <div className="col-2 my-auto">
-                        <label htmlFor="maxi">Maxi</label>
-                        <input type="checkbox" name="maxi" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
-                                onClick={updateMaxi}>Update
-                        </button>
-                    </div>
-                    <div className="col-2 my-auto">
-                        <label htmlFor="iga">IGA</label>
-                        <input type="checkbox" name="iga" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
-                                onClick={updateIga}>Update
-                        </button>
-                    </div>
-                    <div className="col-2 my-auto">
-                        <label htmlFor="metro">Metro</label>
-                        <input type="checkbox" name="metro" className="m-2"/>
-                        <button className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
-                                onClick={updateMetro}>Update
-                        </button>
-                    </div>
-                </div>
-                {/* Search bar section */}
-                <div className="row my-2">
-                    <div className="col-3">
-                        <input type="text" className="form-control" placeholder="Search"/>
-                    </div>
-                    <div className="col-3">
-                        <button className="btn btn-primary">Search</button>
-                    </div>
+                    {['SuperC', 'Maxi', 'IGA', 'Metro'].map((store, index) => (
+                        <div key={index} className="col-2 my-auto">
+                            <label htmlFor={store}>{store}</label>
+                            <input
+                                type="checkbox"
+                                name={store}
+                                className="m-2"
+                                checked={checkboxes[store]}
+                                onChange={() => setCheckboxes(prevState => ({
+                                    ...prevState,
+                                    [store]: !prevState[store]
+                                }))}
+                            />
+                            <button
+                                className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
+                                onClick={() => updateProducts(`/products/update-${store.toLowerCase()}`, () => {
+                                    console.log('store:', store);
+                                    switch (store.toLowerCase()) {
+                                        case 'superc':
+                                            return getSuperCProducts();
+                                        case 'maxi':
+                                            return getMaxiProducts();
+                                        case 'iga':
+                                            return getIgaProducts();
+                                        case 'metro':
+                                            return getMetroProducts();
+                                        default:
+                                            return;
+                                    }
+                                })}
+                            >
+                                Update
+                            </button>
+                        </div>
+                    ))}
                 </div>
                 <div className="row my-2">
                     <div className="col-3">
@@ -138,13 +120,11 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                         </button>
                     </div>
                 </div>
-                {/* Item list section */}
                 <div className="row">
                     {currentItems.map((item, index) => (
                         <Item key={index} item={item}/>
                     ))}
                 </div>
-                {/* Pagination controls */}
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPrevPage={handlePrevPage}
                             onNextPage={handleNextPage}/>
             </div>
