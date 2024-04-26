@@ -99,7 +99,7 @@ public class Metro {
             String name = productTile.findElement(By.cssSelector("div.head__title")).getText();
             String price = productTile.findElement(By.cssSelector("span.price-update")).getText();
             String pricePerHundGram = productTile.findElement(By.cssSelector("div.pricing__secondary-price > span:first-child")).getText();
-            String image = productTile.findElement(By.cssSelector("img")).getAttribute("src");
+            String image = productTile.findElements(By.cssSelector("img")).get(1).getAttribute("src");
             String brand = productTile.findElement(By.cssSelector("span.head__brand")).getText();
             Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Metro");
             tempList.add(product);

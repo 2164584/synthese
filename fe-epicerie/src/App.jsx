@@ -70,6 +70,7 @@ function App() {
 
     function concatAllItems() {
         setItemList([...scProducts, ...metroProducts, ...igaProducts, ...maxiProducts])
+        console.log('itemList:', itemList)
     }
 
     useEffect(() => {
@@ -81,7 +82,7 @@ function App() {
         getMetroProducts()
         getIgaProducts()
         getMaxiProducts()
-    }, []);
+    },[]);
 
 
   return (

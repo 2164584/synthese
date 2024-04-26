@@ -21,6 +21,7 @@ public class UserController {
 
     @GetMapping("/superc")
     public List<Product> getAllSupercProducts() {
+        System.out.println("SuperC"+userService.getSuperCProduct().size());
         return userService.getSuperCProduct();
     }
 
@@ -32,6 +33,7 @@ public class UserController {
 
     @GetMapping("/metro")
     public List<Product> getAllMetroProducts() {
+        System.out.println("Metro"+userService.getMetroProduct().size());
         return userService.getMetroProduct();
     }
 
@@ -43,6 +45,8 @@ public class UserController {
 
     @GetMapping("/iga")
     public List<Product> getAllIGAProducts() {
+
+        System.out.println("IGA"+userService.getIGAProduct().size());
         return userService.getIGAProduct();
     }
 
@@ -54,6 +58,7 @@ public class UserController {
 
     @GetMapping("/maxi")
     public List<Product> getAllMaxiProducts() {
+        System.out.println("Maxi"+userService.getMaxiProduct().size());
         return userService.getMaxiProduct();
     }
 

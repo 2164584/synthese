@@ -34,7 +34,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
         });
     };
 
-    // Apply the filter to the item list based on the `onlyDiscount` state
+    // Apply the filter to the item list based on the `onlyDiscount` state and the checkboxes state
     const filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -44,9 +44,6 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
     const updateProducts = async (endpoint, getProduct) => {
-        console.log('Updating products...');
-        console.log('Endpoint:', endpoint);
-        console.log('getProduct:', getProduct);
         try {
             setUpdateActivated(false);
             await axiosInstance.post(endpoint);
@@ -91,14 +88,14 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                                 className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
                                 onClick={() => updateProducts(`/products/update-${store.toLowerCase()}`, () => {
                                     console.log('store:', store);
-                                    switch (store.toLowerCase()) {
-                                        case 'superc':
+                                    switch (store) {
+                                        case 'SuperC':
                                             return getSuperCProducts();
-                                        case 'maxi':
+                                        case 'Maxi':
                                             return getMaxiProducts();
-                                        case 'iga':
+                                        case 'IGA':
                                             return getIgaProducts();
-                                        case 'metro':
+                                        case 'Metro':
                                             return getMetroProducts();
                                         default:
                                             return;

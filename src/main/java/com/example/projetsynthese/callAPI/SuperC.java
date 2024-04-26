@@ -110,7 +110,7 @@ public class SuperC {
             String image = div.select("img").get(1).attr("src");
 
             String brand = div.select("span.head__brand").text();
-            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "Super C");
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "SuperC");
             products.add(product);
         }
 
