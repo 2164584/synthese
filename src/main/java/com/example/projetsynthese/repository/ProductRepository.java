@@ -20,8 +20,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.manufacturer = 'Maxi'")
     List<Product> findAllWithManufacturerMaxi();
-
-    @Query("SELECT p FROM Product p WHERE p.name LIKE %:name%")
-    List<Product> findProductByName(String name);
-
 }

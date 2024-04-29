@@ -59,9 +59,4 @@ public class UserService {
         if(!Maxi.isFetching)
             Maxi.getMaxiDatas();
     }
-
-    public List<Product> getProductByName(String name){
-        return productRepository.findProductByName(name);
-    }
-
 }
