@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import Item from './Item';
+import CompItem from './CompItem';
+import Item from '../model/Item';
 import {axiosInstance} from "../App";
 import Pagination from "./Pagination";
 
@@ -7,6 +8,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     const [currentPage, setCurrentPage] = useState(1);
     const [updateActivated, setUpdateActivated] = useState(true);
     const [onlyDiscount, setOnlyDiscount] = useState(false);
+    const [nameValue, setNameValue] = useState('');
     const [checkboxes, setCheckboxes] = useState({
         SuperC: true,
         Maxi: true,
@@ -35,7 +37,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     };
 
     // Apply the filter to the item list based on the `onlyDiscount` state and the checkboxes state
-    const filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
+    let filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -65,6 +67,27 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
             setCurrentPage(currentPage - 1);
         }
     };
+
+    useEffect(() => {
+        if(nameValue === '') {
+            filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
+        }
+    }, [nameValue]);
+
+    function getProductByName(name) {
+        axiosInstance.get(`/products/name/${name}`)
+            .then(res => {
+                filteredItems = res.data.map(item => {
+                    let newItem = new Item();
+                    newItem.init(item);
+                    return newItem;
+                });
+                console.log(filteredItems);
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     return (
         <div className='row'>
@@ -118,8 +141,25 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                     </div>
                 </div>
                 <div className="row">
+                    <div className="col-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search by name"
+                            value={nameValue}
+                            onChange={(e) => setNameValue(e.target.value)}
+                        />
+                        <button
+                            className="btn btn-primary my-2"
+                            onClick={() => getProductByName(nameValue)}
+                        >
+                            Search
+                        </button>
+                    </div>
+                </div>
+                <div className="row">
                     {currentItems.map((item, index) => (
-                        <Item key={index} item={item}/>
+                        <CompItem key={index} item={item}/>
                     ))}
                 </div>
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPrevPage={handlePrevPage}

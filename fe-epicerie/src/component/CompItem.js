@@ -1,4 +1,4 @@
-function Item({item, index}) {
+function CompItem({item, index}) {
     return (
         <div key={index} className="col-3 mb-2">
             <div className="p-2 border border-2 rounded bg-white">
@@ -34,4 +34,4 @@ function Item({item, index}) {
     )
 }
 
-export default Item;
+export default CompItem;

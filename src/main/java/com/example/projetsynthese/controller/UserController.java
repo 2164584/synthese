@@ -67,4 +67,10 @@ public class UserController {
         userService.updateMaxiProduct();
         return ResponseEntity.ok("Maxi products updated successfully");
     }
+
+    //put the name in the path
+    @GetMapping("/name/{name}")
+    public List<Product> getProductByName(@PathVariable String name){
+        return userService.getProductByName(name);
+    }
 }

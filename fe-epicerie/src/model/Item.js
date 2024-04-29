@@ -1,4 +1,4 @@
-class Item{
+class CompItem{
     image
     name
     brand
@@ -24,4 +24,4 @@ class Item{
     }
     constructor() {}
 }
-export default Item;
+export default CompItem;

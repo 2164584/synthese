@@ -60,4 +60,8 @@ public class UserService {
             Maxi.getMaxiDatas();
     }
 
+    public List<Product> getProductByName(String name){
+        return productRepository.findProductByName(name);
+    }
+
 }
