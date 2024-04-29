@@ -9,6 +9,8 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     const [updateActivated, setUpdateActivated] = useState(true);
     const [onlyDiscount, setOnlyDiscount] = useState(false);
     const [nameValue, setNameValue] = useState('');
+    const [filteredItems, setFilteredItems] = useState([]);
+
     const [checkboxes, setCheckboxes] = useState({
         SuperC: true,
         Maxi: true,
@@ -27,22 +29,26 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
         }));
     }, []);
 
-    const filterItems = (itemList, onlyDiscount, checkboxes) => {
-        // Filter items based on the checked categories and manufacturer field
+    useEffect(() => {
+        // Filter items based on the updated nameValue
+        const newFilteredItems = filterItems(itemList, onlyDiscount, checkboxes, nameValue);
+        // Update the filteredItems state
+        setFilteredItems(newFilteredItems);
+    }, [nameValue, onlyDiscount, checkboxes, itemList]);
+
+    const filterItems = (itemList, onlyDiscount, checkboxes, name) => {
+        // Filter items based on the checked categories, manufacturer field, and name
         return itemList.filter(item => {
             const isManufacturerChecked = checkboxes[item.manufacturer];
             const isDiscounted = !onlyDiscount || item.isDiscountedThisWeek;
-            return isManufacturerChecked && isDiscounted;
+            const matchesName = name === '' || item.name.toLowerCase().includes(name.toLowerCase());
+            return isManufacturerChecked && isDiscounted && matchesName;
         });
     };
-
-    // Apply the filter to the item list based on the `onlyDiscount` state and the checkboxes state
-    let filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
     const updateProducts = async (endpoint, getProduct) => {
@@ -67,27 +73,6 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
             setCurrentPage(currentPage - 1);
         }
     };
-
-    useEffect(() => {
-        if(nameValue === '') {
-            filteredItems = filterItems(itemList, onlyDiscount, checkboxes);
-        }
-    }, [nameValue]);
-
-    function getProductByName(name) {
-        axiosInstance.get(`/products/name/${name}`)
-            .then(res => {
-                filteredItems = res.data.map(item => {
-                    let newItem = new Item();
-                    newItem.init(item);
-                    return newItem;
-                });
-                console.log(filteredItems);
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
 
     return (
         <div className='row'>
@@ -149,12 +134,6 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                             value={nameValue}
                             onChange={(e) => setNameValue(e.target.value)}
                         />
-                        <button
-                            className="btn btn-primary my-2"
-                            onClick={() => getProductByName(nameValue)}
-                        >
-                            Search
-                        </button>
                     </div>
                 </div>
                 <div className="row">
