@@ -78,11 +78,12 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
         <div className='row'>
             <div className="col-12">
                 <div className="row my-2">
-                    <h2 className="col-2">Items</h2>
+                    <h2 className="col-12">Items</h2>
                     {['SuperC', 'Maxi', 'IGA', 'Metro'].map((store, index) => (
-                        <div key={index} className="col-2 my-auto">
+                        <div key={index} className="col-3 my-auto">
                             <label htmlFor={store}>{store}</label>
                             <input
+                                id={store}
                                 type="checkbox"
                                 name={store}
                                 className="m-2"
@@ -95,7 +96,6 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                             <button
                                 className={`btn btn-primary ${updateActivated ? '' : 'disabled'}`}
                                 onClick={() => updateProducts(`/products/update-${store.toLowerCase()}`, () => {
-                                    console.log('store:', store);
                                     switch (store) {
                                         case 'SuperC':
                                             return getSuperCProducts();
@@ -121,7 +121,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                             className={`btn btn-secondary ${onlyDiscount ? 'active' : ''}`}
                             onClick={() => setOnlyDiscount(!onlyDiscount)}
                         >
-                            {onlyDiscount ? 'Show All Items' : 'Show Discounted Items'}
+                            {onlyDiscount ? 'Tous les items' : 'Items en rabais'}
                         </button>
                     </div>
                 </div>
