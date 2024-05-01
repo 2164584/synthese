@@ -5,13 +5,17 @@ import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 import com.example.projetsynthese.callAPI.IGA;
+import com.example.projetsynthese.callAPI.Maxi;
 import com.example.projetsynthese.callAPI.Metro;
 import com.example.projetsynthese.callAPI.SuperC;
 import com.example.projetsynthese.model.Product;
 import com.example.projetsynthese.repository.ProductRepository;
+import com.jayway.jsonpath.internal.function.numeric.Max;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -96,46 +100,57 @@ public class UserServiceTest {
         // Verify that the method findAllWithManufacturerIGA was called once
         verify(productRepository, times(1)).findAllWithManufacturerSuperC();
     }
-//
-//    @Test
-//    public void testUpdateSuperCProduct() {
-//        // Mock the static variable and method in the SuperC class
-//        PowerMockito.mockStatic(SuperC.class);
-//        when(SuperC.isFecthing).thenReturn(false);
-//
-//        // Act
-//        userService.updateSuperCProduct();
-//
-//        // Verify that the static method getSupercDatas() is called
-//        verifyStatic(SuperC.class);
-//        SuperC.getSupercDatas();
-//    }
-//
-//    @Test
-//    public void testUpdateMetroProduct() {
-//        // Mock the static variable and method in the Metro class
-//        PowerMockito.mockStatic(Metro.class);
-//        when(Metro.isFecthing).thenReturn(false);
-//
-//        // Act
-//        userService.updateMetroProduct();
-//
-//        // Verify that the static method getMetroDatas() is called
-//        verifyStatic(Metro.class);
-//        Metro.getMetroDatas();
-//    }
-//
-//    @Test
-//    public void testUpdateIGAProduct() {
-//        // Mock the static variable and method in the IGA class
-//        PowerMockito.mockStatic(IGA.class);
-//        when(IGA.isFetching).thenReturn(false);
-//
-//        // Act
-//        userService.updateIGAProduct();
-//
-//        // Verify that the static method getIGADatas() is called
-//        verifyStatic(IGA.class);
-//        IGA.getIGADatas();
-//    }
+
+    @Test
+    public void testGetMaxiProduct() {
+        // Arrange: Create a list of products to be returned by the repository
+        List<Product> expectedProducts = Arrays.asList(
+                new Product(),
+                new Product()
+        );
+
+        // Stub the findAllWithManufacturerIGA method to return the list of products
+        when(productRepository.findAllWithManufacturerMaxi()).thenReturn(expectedProducts);
+
+        // Act: Call the getIGAProduct method
+        List<Product> actualProducts = userService.getMaxiProduct();
+
+        // Assert: Verify that the method returns the expected list of products
+        assertEquals(expectedProducts, actualProducts);
+
+        // Verify that the method findAllWithManufacturerIGA was called once
+        verify(productRepository, times(1)).findAllWithManufacturerMaxi();
+    }
+
+    @Test
+    public void testUpdateSuperCProduct() {
+        try (MockedStatic<SuperC> mockedSuperC = Mockito.mockStatic(SuperC.class)) {
+            userService.updateSuperCProduct();
+            mockedSuperC.verify(SuperC::getSupercDatas);
+        }
+    }
+
+    @Test
+    public void testUpdateMetroProduct() {
+        try (MockedStatic<Metro> mockedMetro = Mockito.mockStatic(Metro.class)) {
+            userService.updateMetroProduct();
+            mockedMetro.verify(Metro::getMetroDatas);
+        }
+    }
+
+    @Test
+    public void testUpdateIGAProduct() {
+        try (MockedStatic<IGA> mockedIGA = Mockito.mockStatic(IGA.class)) {
+            userService.updateIGAProduct();
+            mockedIGA.verify(IGA::getIGADatas);
+        }
+    }
+
+    @Test
+    public void testUpdateMaxiProduct() {
+        try (MockedStatic<Maxi> mockedMaxi = Mockito.mockStatic(Maxi.class)) {
+            userService.updateMaxiProduct();
+            mockedMaxi.verify(Maxi::getMaxiDatas);
+        }
+    }
 }

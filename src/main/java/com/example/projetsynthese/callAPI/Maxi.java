@@ -47,18 +47,36 @@ public class Maxi {
         getLastPageDriver.quit();
         System.out.println(nbPageMax);
 
-        for (int i = 1; i <= nbPageMax; i++){
-            System.out.println("Maxi is fetching page " + i + "...");
-            String urlToFetch = URL + i;
-            WebDriver driver = new ChromeDriver();
-            driver.get(urlToFetch);
+        int nbThread = 1;
+
+        Thread[] threads = new Thread[nbThread];
+
+        for (int i = 0; i < nbThread; i++){
+            final int start = i * (nbPageMax / nbThread);
+            final int end = (i == nbThread - 1) ? nbPageMax : start + (nbPageMax / nbThread);
+            threads[i] = new Thread(() -> {
+                for (int j = start; j < end; j++){
+                    String urlToFetch = URL + j;
+                    WebDriver driver = new ChromeDriver();
+                    driver.get(urlToFetch);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    transferToArray(driver);
+                    driver.quit();
+                }
+            });
+            threads[i].start();
+        }
+
+        for (int i = 0; i < nbThread; i++){
             try {
-                Thread.sleep(5000);
+                threads[i].join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            transferToArray(driver);
-            driver.quit();
         }
 
         isFetching = false;

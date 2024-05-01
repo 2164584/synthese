@@ -59,7 +59,7 @@ public class UserControllerTest {
 
         assertNotNull(actualProducts);
         assertFalse(actualProducts.isEmpty());
-        verify(userService, times(2)).getSuperCProduct();
+        verify(userService, times(4)).getSuperCProduct();
 
     }
 
@@ -97,7 +97,7 @@ public class UserControllerTest {
 
         assertNotNull(actualProducts);
         assertFalse(actualProducts.isEmpty());
-        verify(userService, times(2)).getMetroProduct();
+        verify(userService, times(4)).getMetroProduct();
     }
 
     @Test
@@ -134,7 +134,7 @@ public class UserControllerTest {
 
         assertNotNull(actualProducts);
         assertFalse(actualProducts.isEmpty());
-        verify(userService, times(2)).getIGAProduct();
+        verify(userService, times(4)).getIGAProduct();
     }
 
     @Test
@@ -147,5 +147,42 @@ public class UserControllerTest {
 
         // Verify that the service method was called once
         verify(userService, times(1)).updateIGAProduct();
+    }
+
+    @Test
+    public void testGetAllMaxiProducts() throws Exception {
+        mockMvc.perform(get("/products/maxi"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        // Arrange
+
+        List<Product> expectedProducts = Arrays.asList(
+                new Product(),
+                new Product()
+        );
+
+        when(userService.getMaxiProduct()).thenReturn(expectedProducts);
+
+        // Act
+
+        List<Product> actualProducts = userController.getAllMaxiProducts();
+
+        // Assert
+
+        assertNotNull(actualProducts);
+        assertFalse(actualProducts.isEmpty());
+        verify(userService, times(4)).getMaxiProduct();
+    }
+
+    @Test
+    public void testUpdateMaxiProducts() throws Exception {
+        // Act and Assert: Perform POST request and verify the response
+        mockMvc.perform(post("/products/update-maxi")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(containsString("Maxi products updated successfully")));
+
+        // Verify that the service method was called once
+        verify(userService, times(1)).updateMaxiProduct();
     }
 }

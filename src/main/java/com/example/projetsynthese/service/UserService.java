@@ -18,9 +18,6 @@ public class UserService {
     @Autowired
     ProductRepository productRepository;
 
-    @Autowired
-    Maxi maxi;
-
     public UserService() {
     }
 
