@@ -47,7 +47,7 @@ public class Maxi {
         getLastPageDriver.quit();
         System.out.println(nbPageMax);
 
-        int nbThread = 1;
+        int nbThread = 2;
 
         Thread[] threads = new Thread[nbThread];
 
