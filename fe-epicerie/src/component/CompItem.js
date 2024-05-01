@@ -26,6 +26,9 @@ function CompItem({item, index}) {
                             }
                         </div>
                         <button className="mx-auto mt-2 col-10 btn btn-primary">Ajouter</button>
+                        <div className="fst-italic">
+                            {item.manufacturer}
+                        </div>
 
                     </div>
                 </div>

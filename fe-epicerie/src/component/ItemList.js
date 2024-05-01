@@ -126,7 +126,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col-6 mb-2">
                         <input
                             type="text"
                             className="form-control"
