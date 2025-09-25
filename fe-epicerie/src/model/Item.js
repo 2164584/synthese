@@ -9,6 +9,7 @@ class CompItem{
     isDiscountedThisWeek
     isDiscountedNextWeek
     manufacturer
+    productLink
 
     init(data){
         this.image = data.image
@@ -21,6 +22,7 @@ class CompItem{
         this.isDiscountedThisWeek = data.isDiscountedThisWeek
         this.isDiscountedNextWeek = data.isDiscountedNextWeek
         this.manufacturer = data.manufacturer
+        this.productLink = data.productLink
     }
     constructor() {}
 }

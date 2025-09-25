@@ -11,7 +11,10 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,9 @@ public class SuperC {
         Connection connectionForPages = Jsoup.connect(URL);
         try {
             Document document = connectionForPages.get();
+            try (FileWriter writer = new FileWriter("src/main/java/com/example/projetsynthese/resultSuperC.html")) {
+                writer.write(document.html());
+            }
             Elements lastPage = document.select("a.ppn--element");
             nbPageMax = Integer.parseInt(lastPage.get(lastPage.size() - 2).text());
         } catch (IOException e) {
@@ -107,10 +113,11 @@ public class SuperC {
             }
             String gram = div.select("span.head__unit-details").text();
             String pricePerHundGram = div.select("div.pricing__secondary-price > span:first-child").text();
-            String image = div.select("img").get(1).attr("src");
+            String image = div.select("picture.defaultable-picture").select("img").attr("src");
+            String link = "https://www.superc.ca" + div.select("a.product-details-link").attr("href");
 
             String brand = div.select("span.head__brand").text();
-            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "SuperC");
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "SuperC" ,link);
             products.add(product);
         }
 

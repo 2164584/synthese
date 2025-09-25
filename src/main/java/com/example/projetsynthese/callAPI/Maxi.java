@@ -156,7 +156,9 @@ public class Maxi {
                 image = "N/A";
             }
 
-            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, discountPrice, isDiscountThisWeek, false, "Maxi");
+            String link = "";
+
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, discountPrice, isDiscountThisWeek, false, "Maxi", link);
             produits.add(product);
         }
     }

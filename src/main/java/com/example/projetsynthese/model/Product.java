@@ -1,6 +1,7 @@
 package com.example.projetsynthese.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.jna.WString;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -31,11 +32,12 @@ public class Product {
     private boolean isDiscountedThisWeek;
     @JsonProperty("isDiscountedNextWeek")
     private boolean isDiscountedNextWeek;
-
     @JsonProperty("manufacturer")
     private String manufacturer;
+    @JsonProperty("productLink")
+    private String productLink;
 
-    public Product(String id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek, String manufacturer) {
+    public Product(String id, String name, String image, String brand, String price, String gram, String pricePerHundGram, String discountPrice, boolean isDiscountedThisWeek, boolean isDiscountedNextWeek, String manufacturer, String productLink) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -47,6 +49,7 @@ public class Product {
         this.isDiscountedThisWeek = isDiscountedThisWeek;
         this.isDiscountedNextWeek = isDiscountedNextWeek;
         this.manufacturer = manufacturer;
+        this.productLink = productLink;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class Product {
                 ", isDiscountedThisWeek=" + isDiscountedThisWeek +
                 ", isDiscountedNextWeek=" + isDiscountedNextWeek +
                 ", manufacturer='" + manufacturer + '\'' +
+                ", productLink='" + productLink + '\'' +
                 '}';
     }
 }

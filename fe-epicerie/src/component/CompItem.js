@@ -25,7 +25,7 @@ function CompItem({item, index}) {
                                     </div>
                             }
                         </div>
-                        <button className="mx-auto mt-2 col-10 btn btn-primary">Ajouter</button>
+                        <a className="mx-auto mt-2 col-10 btn btn-primary" target="_blank" href={item.productLink}>Lien vers le produit</a>
                         <div className="fst-italic">
                             {item.manufacturer}
                         </div>

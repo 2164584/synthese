@@ -110,12 +110,13 @@ public class IGA {
             String name = productTile.findElement(By.cssSelector("a.js-ga-productname")).getText();
             String price = productTile.findElement(By.cssSelector("div.item-product__price")).getText();
             String image = "https://sbs-prd-cdn-products.azureedge.net/media/image/product/fr/small/" + productTile.findElement(By.cssSelector("a.js-ga-productname")).getAttribute("href").split("_")[1] + ".jpg";
+            String link = "";
             try {
                 pricePerHundGram = productTile.findElement(By.cssSelector("div.text--small")).getText();
             } catch (NoSuchElementException e) {
                 pricePerHundGram = price + " / " + gram;
             }
-            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "IGA");
+            Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "IGA", link);
             tempList.add(product);
         }
 
