@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public void updateSuperCProduct(){
-        if(!SuperC.isFecthing)
+        if(!SuperC.isFetching)
             SuperC.getSupercDatas();
     }
 
@@ -49,11 +49,19 @@ public class UserService {
 
     public void updateIGAProduct(){
         if(!IGA.isFetching)
-            IGA.getIGADatas();
+            IGA.getSupercDatas();
     }
 
     public void updateMaxiProduct(){
         if(!Maxi.isFetching)
             Maxi.getMaxiDatas();
+    }
+
+    public float getSuperCPercent(){
+        return SuperC.getPercent();
+    }
+
+    public float getIGAPercent(){
+        return IGA.getPercent();
     }
 }

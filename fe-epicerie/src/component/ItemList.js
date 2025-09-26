@@ -3,6 +3,9 @@ import CompItem from './CompItem';
 import Item from '../model/Item';
 import {axiosInstance} from "../App";
 import Pagination from "./Pagination";
+import { toast } from 'react-toastify';
+import ProgressToast from './ProgressToast';
+
 
 function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProducts, getMaxiProducts }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,8 +21,8 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
         Metro: true
     });
     const itemsPerPage = 100
+
     useEffect(() => {
-        // Update the state of checkboxes
         setCheckboxes(prevState => ({
             ...prevState,
             SuperC: true,
@@ -30,14 +33,11 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     }, []);
 
     useEffect(() => {
-        // Filter items based on the updated nameValue
         const newFilteredItems = filterItems(itemList, onlyDiscount, checkboxes, nameValue);
-        // Update the filteredItems state
         setFilteredItems(newFilteredItems);
     }, [nameValue, onlyDiscount, checkboxes, itemList]);
 
     const filterItems = (itemList, onlyDiscount, checkboxes, name) => {
-        // Filter items based on the checked categories, manufacturer field, and name
         return itemList.filter(item => {
             const isManufacturerChecked = checkboxes[item.manufacturer];
             const isDiscounted = !onlyDiscount || item.isDiscountedThisWeek;
@@ -50,13 +50,16 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+    let toastId = null;
 
-    const updateProducts = async (endpoint, getProduct) => {
+    const updateProducts = async (endpoint, getProduct, store) => {
         try {
             setUpdateActivated(false);
+            pollProgress(getProduct, store);
             await axiosInstance.post(endpoint);
             getProduct();
             setUpdateActivated(true);
+
         } catch (error) {
             console.error(`Error updating products: ${error}`);
         }
@@ -73,6 +76,51 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
             setCurrentPage(currentPage - 1);
         }
     };
+
+    function showProgressToast(store) {
+        if (!toast.isActive(toastId)) {
+            toastId = toast.info(<ProgressToast store={store} percent={0} />, {
+            position: "top-left",
+            autoClose: false,
+            closeOnClick: false,
+            draggable: false,
+            });
+        }
+    }
+
+    function updateProgressToast(percent, store) {
+        toast.update(toastId, {
+            render: <ProgressToast store={store} percent={percent} />,
+        });
+
+        if (percent >= 100) {
+            setTimeout(() => {
+            toast.dismiss(toastId);
+            }, 3000);
+        }
+    }
+
+    const pollProgress = (getProduct, store) => {
+        showProgressToast(store);
+
+        const interval = setInterval(() => {
+            axiosInstance.get('/products/' + store.toLowerCase() + '-progress')
+            .then(res => {
+                const percent = res.data;
+                updateProgressToast(percent, store);
+
+                if (percent >= 100) {
+                    clearInterval(interval);
+                }
+            })
+            .catch(err => {
+                console.error("Error polling progress:", err);
+                clearInterval(interval);
+            });
+        }, 250);
+    };
+
+
 
     return (
         <div className='row'>
@@ -108,7 +156,7 @@ function ItemList({ itemList, getSuperCProducts, getMetroProducts, getIgaProduct
                                         default:
                                             return;
                                     }
-                                })}
+                                }, store)}
                             >
                                 Update
                             </button>

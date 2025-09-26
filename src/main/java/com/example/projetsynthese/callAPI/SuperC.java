@@ -23,9 +23,12 @@ import java.util.List;
 public class SuperC {
     private static ProductRepository productRepository;
 
-    public static boolean isFecthing = false;
+    public static boolean isFetching = false;
     public static final String URL = "https://www.superc.ca/recherche";
 
+    private static int nbOfPagesCompleted = 0;
+    @Getter
+    private static float percent = 0;
     @Getter
     private static List<Product> produits = new ArrayList<>();
 
@@ -34,10 +37,13 @@ public class SuperC {
         SuperC.productRepository = productRepository;
     }
 
+    public static float getPercent(){
+        return percent;
+    }
 
     public static void getSupercDatas() {
         produits.clear();
-        isFecthing = true;
+        isFetching = true;
         int nbPageMax;
 
         Connection connectionForPages = Jsoup.connect(URL);
@@ -71,6 +77,9 @@ public class SuperC {
                         throw new RuntimeException(e);
                     }
                     transferToArray(doc);
+                    nbOfPagesCompleted++;
+                    percent = (float) Math.round(((float) nbOfPagesCompleted / nbPageMax * 100) * 100) / 100;
+                    System.out.println(percent + "% Completed!");
                 }
             });
             threads[i].start();
@@ -83,10 +92,12 @@ public class SuperC {
                 e.printStackTrace();
             }
         }
-        isFecthing = false;
+        isFetching = false;
 
         productRepository.saveAll(produits);
         System.out.println("Super C is done.");
+        percent = 0;
+        nbOfPagesCompleted = 0;
     }
 
     public static void transferToArray(Document doc) {
@@ -114,7 +125,11 @@ public class SuperC {
             String gram = div.select("span.head__unit-details").text();
             String pricePerHundGram = div.select("div.pricing__secondary-price > span:first-child").text();
             String image = div.select("picture.defaultable-picture").select("img").attr("src");
+            if(!image.startsWith("https")){
+                image = "https://www.superc.ca" + image;
+            }
             String link = "https://www.superc.ca" + div.select("a.product-details-link").attr("href");
+            String category = div.attr("data-product-category");
 
             String brand = div.select("span.head__brand").text();
             Product product = new Product(id, name, image, brand, price, gram, pricePerHundGram, priceDiscount, isDiscountedThisWeek, false, "SuperC" ,link);
@@ -124,6 +139,5 @@ public class SuperC {
         synchronized (produits) {
             produits.addAll(products);
         }
-
     }
 }

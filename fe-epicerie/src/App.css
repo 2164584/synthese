@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+.Toastify__toast {
+  font-size: 0.85rem;
+  padding: 8px 12px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

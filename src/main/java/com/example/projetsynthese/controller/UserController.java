@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/superc")
     public List<Product> getAllSupercProducts() {
-        System.out.println("SuperC"+userService.getSuperCProduct().size());
+        System.out.println("SuperC "+userService.getSuperCProduct().size());
         return userService.getSuperCProduct();
     }
 
@@ -31,9 +31,14 @@ public class UserController {
         return ResponseEntity.ok("SuperC products updated successfully");
     }
 
+    @GetMapping("/superc-progress")
+    public ResponseEntity<Float> getSupercProgress() {
+        return ResponseEntity.ok(userService.getSuperCPercent());
+    }
+
     @GetMapping("/metro")
     public List<Product> getAllMetroProducts() {
-        System.out.println("Metro"+userService.getMetroProduct().size());
+        System.out.println("Metro "+userService.getMetroProduct().size());
         return userService.getMetroProduct();
     }
 
@@ -46,7 +51,7 @@ public class UserController {
     @GetMapping("/iga")
     public List<Product> getAllIGAProducts() {
 
-        System.out.println("IGA"+userService.getIGAProduct().size());
+        System.out.println("IGA "+userService.getIGAProduct().size());
         return userService.getIGAProduct();
     }
 
@@ -56,9 +61,14 @@ public class UserController {
         return ResponseEntity.ok("IGA products updated successfully");
     }
 
+    @GetMapping("/iga-progress")
+    public ResponseEntity<Float> getIGAProgress() {
+        return ResponseEntity.ok(userService.getIGAPercent());
+    }
+
     @GetMapping("/maxi")
     public List<Product> getAllMaxiProducts() {
-        System.out.println("Maxi"+userService.getMaxiProduct().size());
+        System.out.println("Maxi "+userService.getMaxiProduct().size());
         return userService.getMaxiProduct();
     }
 

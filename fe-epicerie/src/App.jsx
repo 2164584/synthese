@@ -2,6 +2,8 @@ import './App.css';
 import Item from "./model/Item";
 import ItemList from "./component/ItemList";
 import axios from "axios";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {useEffect, useState} from "react";
 
 
@@ -98,6 +100,7 @@ function App() {
                 <ItemList itemList={itemList} getSuperCProducts={getSuperCProducts} getMetroProducts={getMetroProducts} getIgaProducts={getIgaProducts} getMaxiProducts={getMaxiProducts}/>
             </div>
         </div>
+        <ToastContainer position="top-left" autoClose={false} hideProgressBar />
     </div>
   );
 }
